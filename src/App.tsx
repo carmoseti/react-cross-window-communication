@@ -1,26 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+    BrowserRouter,
+    Switch,
+    Route,
+    Redirect, RouteProps
+} from "react-router-dom";
+import {routes} from "./routes";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+/**
+ * App page
+ *
+ * @desc Main entry of the project
+ *
+ * */
+const App = ()=>{
+    return (
+        <React.Suspense fallback={'Loading...'}>
+            <BrowserRouter>
+                <Switch>
+                    {routes.map((route:RouteProps,i:number)=> <Route key={i} {...route} />)}
+                    <Redirect from={'/'} to={'/users'}/>
+                </Switch>
+            </BrowserRouter>
+        </React.Suspense>
+    );
 }
 
 export default App;

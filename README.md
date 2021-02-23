@@ -1,7 +1,6 @@
-# Getting Started with Create React App
+# Cross Window Communication
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+React app that demonstrates communication between parent window and child window (opened via ```window.open``` method)
 ## Available Scripts
 
 In the project directory, you can run:
