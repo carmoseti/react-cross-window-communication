@@ -56,11 +56,15 @@ export interface UserListProps{}
 const UserList :FunctionComponent<UserListProps> = (props)=>{
     const [childWindow, setChildWindow] = React.useState<Window|null>(null);
     const [childWindowConfirmed, setChildWindowConfirmed] = React.useState<boolean>(false);
+    const [childMessages, setChildMessages] = React.useState<string []>([]);
 
     const handleEditUser = (user :User)=>{
         if (!childWindow){
-            const newWindow :Window|null = window.open(`/users/${user.id}`,`EditUser${user.id}`,'width=750,height=500,left=50,top=50');
+            const newWindow :Window|null = window.open(`/users/${user.id}`,`EditUser${user.id}`,'width=750,height=500,left=100,top=100');
             if (newWindow){
+                /*
+                * setTimeout is a hack otherwise postMessage does not work and user details are not posted to the child window
+                * */
                 setTimeout(()=>{
                     newWindow.postMessage({
                         messageId:'EditUser',
@@ -78,6 +82,10 @@ const UserList :FunctionComponent<UserListProps> = (props)=>{
         if (event.data.messageId && (event.data.messageId === "ChildWindowConfirm")){
             setChildWindowConfirmed(true);
         }
+
+        if (typeof event.data === "string"){
+            setChildMessages(Array.from(childMessages).concat([event.data]));
+        }
     }
 
     const handleChildWindowUnload = ()=>{
@@ -94,7 +102,7 @@ const UserList :FunctionComponent<UserListProps> = (props)=>{
         return ()=>{
             window.removeEventListener("message",handleChildWindowMessageEvent);
         }
-    },[]);
+    },[childMessages]);
 
     React.useEffect(()=>{
         if (childWindow){
@@ -136,6 +144,22 @@ const UserList :FunctionComponent<UserListProps> = (props)=>{
                 }
                 </tbody>
             </table>
+
+            {childMessages.length > 0 &&
+            <div style={{
+                padding: 10,
+                background: '#1fcd12',
+                color: 'white',
+                display: "inline-block",
+                marginTop: 5
+            }}>
+                <h5>Child window messages</h5>
+                {childMessages.map(
+                    (childMessage :string,i: number)=><p key={i}>{childMessage}</p>)
+                }
+            </div>
+            }
+
         </div>
     );
 }

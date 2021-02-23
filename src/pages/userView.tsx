@@ -25,7 +25,7 @@ const UserView :FunctionComponent<UserViewProps & RouteComponentProps> = (props)
     const [user, setUser] = React.useState<User|null>(null);
 
     const sendMessageToParent = ()=>{
-        if (parentWindow) parentWindow.postMessage('Child window has messaged!!!',`${window.location.origin}`);
+        if (parentWindow) parentWindow.postMessage(`User view with id ${props.match.params.id} has messaged!!!`,`${window.location.origin}`);
     }
 
     React.useEffect(()=>{
